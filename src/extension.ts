@@ -1,26 +1,38 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	let disposable = vscode.commands.registerCommand('copilot-api-caller.triggerCopilotChat', async () => {
+		// Get selected text from the active editor
+		const editor = vscode.window.activeTextEditor;
+		let contextText = '';
+		if (editor) {
+			const selection = editor.selection;
+			contextText = editor.document.getText(selection);
+		}
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "copilot-api-caller" is now active!');
+		// Prompt for user input
+		const prompt = await vscode.window.showInputBox({
+			prompt: 'Enter your query for GitHub Copilot',
+			placeHolder: 'e.g., Explain this code',
+			value: contextText ? `Regarding this code: \n\`\`\`\n${contextText}\n\`\`\`\n` : ''
+		});
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('copilot-api-caller.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from copilot-api-caller!');
+		if (prompt) {
+			try {
+				// Execute the chat command (Note: Capturing response might not be directly supported)
+				await vscode.commands.executeCommand('workbench.action.chat.open', prompt);
+				vscode.window.showInformationMessage('Sent prompt to Copilot Chat!');
+				
+				// Placeholder for capturing response - VS Code API may not directly provide this
+				// You might need to listen to chat events or use a different approach
+				// For now, we'll show a message indicating the prompt was sent
+			} catch (error) {
+				vscode.window.showErrorMessage(`Failed to trigger Copilot Chat: ${error}`);
+			}
+		}
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

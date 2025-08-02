@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "copilot-api-caller.helloWorld",
-        "title": "Hello World"
+        "command": "copilot-api-caller.triggerCopilotChat",
+        "title": "Copilot API Caller: Trigger Copilot Chat"
       }
     ]
   },
