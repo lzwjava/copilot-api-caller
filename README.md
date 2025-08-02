@@ -1,4 +1,4 @@
-# copilot-api-caller README
+# copilot-api-caller 
 
 This is the README for your extension "copilot-api-caller". After writing up a brief description, we recommend including the following sections.
 
